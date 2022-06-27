@@ -3,20 +3,24 @@ import { useState } from 'react'
 const App = () => {
   const [persons, setPersons] = useState([
     {
-      id: "person-1",
       name: 'Arto Hellas'
     }
   ])
   const [newName, setNewName] = useState('')
 
   const handleSubmit = (event) => {
+
     event.preventDefault();
-    const person = {
-      id: `person-${persons.length + 1}`,
-      name: newName
-    };
-    setPersons(persons.concat(person));
-    setNewName("");
+
+    if (persons.map(person => person.name).find(name => name == newName)) {
+      alert(`${newName} is already added to phonebook`);
+    } else {
+      const person = {
+        name: newName
+      };
+      setPersons(persons.concat(person));
+      setNewName("");
+    }
   }
 
   const handleOnChange = (event) => {
@@ -36,7 +40,7 @@ const App = () => {
       </form>
       <h2>Numbers</h2>
       {persons.map(person =>
-        <p key={person.id}>
+        <p key={person.name}>
           {person.name}
         </p>
       )}
