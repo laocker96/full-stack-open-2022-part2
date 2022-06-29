@@ -25,7 +25,7 @@ function App() {
     setSearchCountry(event.target.value);
   }
 
-  const handleClick = (mappedCountry) => { 
+  const handleClick = (mappedCountry) => {
     const copy = [...countries];
     const index = countries.findIndex((country) => country == mappedCountry);
     countries[index].show = !countries[index].show;
