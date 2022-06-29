@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import Country from "./components/Country";
 
 function App() {
 
@@ -11,21 +12,31 @@ function App() {
     axios
       .get("https://restcountries.com/v3.1/all")
       .then(result => {
-        setCountries(result.data);
+        const data = result.data;
+        data.forEach(country => {
+          country.show = false;
+        });
+        setCountries(data);
       })
 
   }, []);
 
-  const handleOnChange = (event) => {
-    setSearchCountry(event.target.value)
+  const handleChange = (event) => {
+    setSearchCountry(event.target.value);
+  }
+
+  const handleClick = (mappedCountry) => { 
+    const copy = [...countries];
+    const index = countries.findIndex((country) => country == mappedCountry);
+    countries[index].show = !countries[index].show;
+    setCountries(copy);
   }
 
   const filteredCountries = countries.filter(country => country.name.common.toLowerCase().includes(searchCountry.toLowerCase()));
-  const oneCountry = filteredCountries[0];
 
   return (
     <div>
-      find countries <input value={searchCountry} onChange={handleOnChange} />
+      find countries <input value={searchCountry} onChange={handleChange} />
       {searchCountry !== "" &&
         <>
           {filteredCountries.length > 10 &&
@@ -33,22 +44,24 @@ function App() {
           }
           {filteredCountries.length <= 10 && filteredCountries.length > 1 &&
             filteredCountries.map((country) => (
-              <p>{country.name.common}</p>
+              <div key={country.name.common}>
+                {!country.show &&
+                  <>
+                    {country.name.common}
+                    < button onClick={() => handleClick(country)} >show</button>
+                  </>
+                }
+                {country.show &&
+                  <>
+                    <button onClick={() => handleClick(country)}>hide</button>
+                    <Country country={country} />
+                  </>
+                }
+              </div >
             ))
           }
           {filteredCountries.length === 1 &&
-            <div >
-              <h1>{oneCountry.name.common}</h1>
-              <p>{oneCountry.capital}</p>
-              <p>{oneCountry.area}</p>
-              <h2>languages:</h2>
-              <ul>
-                {Object.keys(oneCountry.languages).map((key) => (
-                  <li>{oneCountry.languages[key]}</li>
-                ))}
-              </ul>
-              <img src={oneCountry.flags.png} alt={`Flag of ${oneCountry.name.common}`} />
-            </div>
+            <Country country={filteredCountries[0]} />
           }
         </>
       }
