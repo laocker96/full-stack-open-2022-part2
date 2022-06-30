@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
+import phonebookService from './services/phonebookService';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -11,28 +12,35 @@ const App = () => {
   const [searchedName, setSearchedName] = useState('');
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3001/persons")
-      .then(response => {
-        console.log("Promise fullfilled");
-        setPersons(response.data);
-      })
+    phonebookService
+      .getAllPersons()
+      .then(initialPersons => {
+        setPersons(initialPersons);
+      });
   }, []);
 
   const handleSubmit = (event) => {
 
     event.preventDefault();
 
+
+
     if (persons.map(person => person.name).find(name => name.toLowerCase() == newName.toLowerCase())) {
       alert(`${newName} is already added to phonebook`);
     } else {
+
       const person = {
         name: newName,
         number: newPhone
       };
-      setPersons(persons.concat(person));
-      setNewName("");
-      setNewPhone("");
+
+      phonebookService
+        .savePerson(person)
+        .then(savePerson => {
+          setPersons(persons.concat(savePerson));
+          setNewName("");
+          setNewPhone("");
+        });
     }
   }
 
