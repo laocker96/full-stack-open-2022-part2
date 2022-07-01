@@ -64,7 +64,7 @@ const App = () => {
       <Filter searchedName={searchedName} handleSearchedNameChange={handleSearchedNameChange} />
       <PersonForm handleSubmit={handleSubmit} newName={newName} handleNameChange={handleNameChange} newPhone={newPhone} handlePhoneChange={handlePhoneChange} />
       <h2>Numbers</h2>
-      <Persons filteredPersons={filteredPersons} />
+      <Persons filteredPersons={filteredPersons} persons={persons} setPersons={setPersons} />
     </div>
   )
 }

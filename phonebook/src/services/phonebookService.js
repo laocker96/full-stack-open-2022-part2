@@ -13,4 +13,9 @@ const savePerson = (person) => {
     return response(request);
 }
 
-export default { getAllPersons, savePerson }
+const deletePerson = (id) => {
+    const request = axios.delete(`${baseUrl}/${id}`);
+    return response(request);
+}
+
+export default { getAllPersons, savePerson, deletePerson }
