@@ -1,6 +1,6 @@
 import phonebookService from "../services/phonebookService";
 
-const Persons = ({ filteredPersons, persons, setPersons, }) => {
+const Persons = ({ filteredPersons, persons, setPersons, setNotification }) => {
 
     const handleClick = (person) => {
 
@@ -8,8 +8,24 @@ const Persons = ({ filteredPersons, persons, setPersons, }) => {
             phonebookService
                 .deletePerson(person.id)
                 .then(() => {
-                    console.log(`${person.name} deleted from phonebook`);
+                    setNotification({
+                        message: `Deleted ${person.name}`,
+                        class: "info"
+                    });
+                    setTimeout(() => {
+                        setNotification(null);
+                    }, 2000);
                     setPersons(persons.filter(p => p.id != person.id));
+                })
+                .catch(() => {
+                    setNotification({
+                        message: `Information of ${person.name} has already been removed from server`,
+                        class: "error"
+                    });
+                    setTimeout(() => {
+                        setNotification(null);
+                    }, 2000);
+                    setPersons(persons.filter(p => p.id !== person.id));
                 });
         }
     }

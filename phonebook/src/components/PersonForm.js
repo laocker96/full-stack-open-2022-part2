@@ -1,7 +1,7 @@
 import { useState } from "react";
 import phonebookService from "../services/phonebookService";
 
-const PersonForm = ({ persons, setPersons, setMessage }) => {
+const PersonForm = ({ persons, setPersons, setNotification }) => {
 
     const [newName, setNewName] = useState('');
     const [newPhone, setNewPhone] = useState('');
@@ -20,10 +20,23 @@ const PersonForm = ({ persons, setPersons, setMessage }) => {
                     .updatePerson(findPersonCopy)
                     .then(updatedPerson => {
                         setPersons(persons.map(person => person.id === updatedPerson.id ? updatedPerson : person));
-                        setMessage(`Updated ${updatedPerson.name}'s phone number`);
+                        setNotification({
+                            message: `Updated ${updatedPerson.name}'s phone number`,
+                            class: 'info'
+                        });
                         setTimeout(() => {
-                            setMessage(null)
+                            setNotification(null);
                         }, 2000);
+                    })
+                    .catch(() => {
+                        setNotification({
+                            message: `Information of ${findPerson.name} has already been removed from server`,
+                            class: 'error'
+                        });
+                        setTimeout(() => {
+                            setNotification(null);
+                        }, 2000);
+                        setPersons(persons.filter(p => p.id !== findPerson.id));
                     });
             }
         } else {
@@ -39,9 +52,12 @@ const PersonForm = ({ persons, setPersons, setMessage }) => {
                     setPersons(persons.concat(savePerson));
                     setNewName("");
                     setNewPhone("");
-                    setMessage(`Added ${savePerson.name}`);
+                    setNotification({
+                        message: `Added ${savePerson.name}`,
+                        class: 'info'
+                    });
                     setTimeout(() => {
-                        setMessage(null)
+                        setNotification(null)
                     }, 2000);
                 });
         }

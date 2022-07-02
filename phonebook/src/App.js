@@ -10,7 +10,7 @@ import './index.css';
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [searchedName, setSearchedName] = useState('');
-  const [message, setMessage] = useState(null);
+  const [notification, setNotification] = useState(null);
 
   useEffect(() => {
     phonebookService
@@ -25,10 +25,10 @@ const App = () => {
   return (
     <div>
       <h2>Phonenook</h2>
-      <Notification message={message} />
+      <Notification notification={notification} />
       <Filter searchedName={searchedName} setSearchedName={setSearchedName} />
-      <PersonForm persons={persons} setPersons={setPersons} setMessage={setMessage} />
-      <Persons filteredPersons={filteredPersons} persons={persons} setPersons={setPersons} />
+      <PersonForm persons={persons} setPersons={setPersons} setNotification={setNotification} />
+      <Persons filteredPersons={filteredPersons} persons={persons} setPersons={setPersons} setNotification={setNotification} />
     </div>
   )
 }
