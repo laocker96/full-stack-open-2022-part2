@@ -1,7 +1,7 @@
 import { useState } from "react";
 import phonebookService from "../services/phonebookService";
 
-const PersonForm = ({ persons, setPersons }) => {
+const PersonForm = ({ persons, setPersons, setMessage }) => {
 
     const [newName, setNewName] = useState('');
     const [newPhone, setNewPhone] = useState('');
@@ -20,7 +20,11 @@ const PersonForm = ({ persons, setPersons }) => {
                     .updatePerson(findPersonCopy)
                     .then(updatedPerson => {
                         setPersons(persons.map(person => person.id === updatedPerson.id ? updatedPerson : person));
-                    })
+                        setMessage(`Updated ${updatedPerson.name}'s phone number`);
+                        setTimeout(() => {
+                            setMessage(null)
+                        }, 2000);
+                    });
             }
         } else {
 
@@ -35,6 +39,10 @@ const PersonForm = ({ persons, setPersons }) => {
                     setPersons(persons.concat(savePerson));
                     setNewName("");
                     setNewPhone("");
+                    setMessage(`Added ${savePerson.name}`);
+                    setTimeout(() => {
+                        setMessage(null)
+                    }, 2000);
                 });
         }
     }
