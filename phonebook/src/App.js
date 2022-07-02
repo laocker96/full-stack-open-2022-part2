@@ -7,8 +7,6 @@ import phonebookService from './services/phonebookService';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
-  const [newName, setNewName] = useState('');
-  const [newPhone, setNewPhone] = useState('');
   const [searchedName, setSearchedName] = useState('');
 
   useEffect(() => {
@@ -19,51 +17,12 @@ const App = () => {
       });
   }, []);
 
-  const handleSubmit = (event) => {
-
-    event.preventDefault();
-
-
-
-    if (persons.map(person => person.name).find(name => name.toLowerCase() == newName.toLowerCase())) {
-      alert(`${newName} is already added to phonebook`);
-    } else {
-
-      const person = {
-        name: newName,
-        number: newPhone
-      };
-
-      phonebookService
-        .savePerson(person)
-        .then(savePerson => {
-          setPersons(persons.concat(savePerson));
-          setNewName("");
-          setNewPhone("");
-        });
-    }
-  }
-
-  const handleNameChange = (event) => {
-    setNewName(event.target.value);
-  }
-
-  const handlePhoneChange = (event) => {
-    setNewPhone(event.target.value);
-  }
-
-  const handleSearchedNameChange = (event) => {
-    setSearchedName(event.target.value);
-  }
-
   const filteredPersons = searchedName != "" ? persons.filter(person => person.name.toLowerCase().includes(searchedName.toLowerCase())) : persons;
 
   return (
     <div>
-      <h2>Phonebook</h2>
-      <Filter searchedName={searchedName} handleSearchedNameChange={handleSearchedNameChange} />
-      <PersonForm handleSubmit={handleSubmit} newName={newName} handleNameChange={handleNameChange} newPhone={newPhone} handlePhoneChange={handlePhoneChange} />
-      <h2>Numbers</h2>
+      <Filter searchedName={searchedName} setSearchedName={setSearchedName} />
+      <PersonForm persons={persons} setPersons={setPersons} />
       <Persons filteredPersons={filteredPersons} persons={persons} setPersons={setPersons} />
     </div>
   )

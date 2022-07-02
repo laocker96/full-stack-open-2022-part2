@@ -16,6 +16,7 @@ const Persons = ({ filteredPersons, persons, setPersons, }) => {
 
     return (
         <>
+            <h2>Numbers</h2>
             {filteredPersons.map(person =>
                 <p key={person.name}>
                     {person.name}&nbsp;{person.number}

@@ -13,9 +13,14 @@ const savePerson = (person) => {
     return response(request);
 }
 
+const updatePerson = (person) => {
+    const request = axios.put(`${baseUrl}/${person.id}`, person);
+    return response(request);
+}
+
 const deletePerson = (id) => {
     const request = axios.delete(`${baseUrl}/${id}`);
     return response(request);
 }
 
-export default { getAllPersons, savePerson, deletePerson }
+export default { getAllPersons, savePerson, updatePerson, deletePerson }
